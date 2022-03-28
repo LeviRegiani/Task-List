@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import br.com.alura.gerenciador.acao.Acao;
+import br.com.manager.tasks.action.Action;
 
 /**
  * Servlet implementation class HomeServlet
@@ -31,26 +31,26 @@ public class ControllerFilter extends HttpServlet {
 		HttpServletRequest request = (HttpServletRequest) servletRequest;
 		HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-		String paramAcao = request.getParameter("acao");
+		String paramAction = request.getParameter("action");
 
-		String nomeDaClasse = "br.com.alura.gerenciador.acao." + paramAcao;
-
-		String nome;
+		String className = "br.com.manager.tasks.action." + paramAction;
+		System.out.println(paramAction);
+		String name;
 
 		try {
-			Class classe = Class.forName(nomeDaClasse);
-			Action acao = (Action) classe.newInstance();
-			nome = acao.executa(request, response);
+			Class classe = Class.forName(className);
+			Action action = (Action) classe.newInstance();
+			name = action.executes(request, response);
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
 			throw new ServletException(e);
 		}
 
-		String[] tipoEEndereco = nome.split(":");
-		if (tipoEEndereco[0].equals("forward")) {
-			RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/view/" + tipoEEndereco[1]);
+		String[] typeAdress = name.split(":");
+		if (typeAdress[0].equals("forward")) {
+			RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/view/" + typeAdress[1]);
 			rd.forward(request, response);
 		} else {
-			response.sendRedirect(tipoEEndereco[1]);
+			response.sendRedirect(typeAdress[1]);
 		}
 	}
 
