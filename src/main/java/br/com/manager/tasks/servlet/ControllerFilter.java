@@ -53,5 +53,4 @@ public class ControllerFilter extends HttpServlet {
 			response.sendRedirect(typeAdress[1]);
 		}
 	}
-
 }
